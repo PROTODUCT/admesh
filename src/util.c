@@ -30,6 +30,7 @@
 static void stl_rotate(float *x, float *y, float angle);
 static float get_area(stl_facet *facet);
 static float get_volume(stl_file *stl);
+static float all_area(stl_file *stl);
 
 
 void
@@ -393,6 +394,22 @@ void stl_calculate_volume(stl_file *stl) {
   stl->stats.volume = get_volume(stl);
 }
 
+void stl_calculate_area(stl_file *stl) {
+  if (stl->error) return;
+  stl->stats.area = all_area(stl);
+}
+
+static float all_area(stl_file *stl) {
+  float all_area = 0.0;
+  int i;
+
+  if (stl->error) return 0;
+  for(i = 0; i < stl->stats.number_of_facets; i++) {
+    all_area += get_area(&stl->facet_start[i]);
+  }
+  return all_area;
+}
+
 static float get_area(stl_facet *facet) {
   double cross[3][3];
   float sum[3];
@@ -539,6 +556,10 @@ All facets connected.  No further nearby check necessary.\n");
   if (verbose_flag)
     printf("Calculating volume...\n");
   stl_calculate_volume(stl);
+
+  if (verbose_flag)
+    printf("Calculating area...\n");
+  stl_calculate_area(stl);
 
   if(fixall_flag) {
     if(stl->stats.volume < 0.0) {

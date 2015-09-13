@@ -108,7 +108,8 @@ Total disconnected facets        : %5d               %5d\n",
 Number of parts       : %5d        Volume   : % f\n",
           stl->stats.number_of_parts, stl->stats.volume);
   fprintf(file, "\
-Degenerate facets     : %5d\n", stl->stats.degenerate_facets);
+Degenerate facets     : %5d        Area     : % f\n",
+          stl->stats.degenerate_facets, stl->stats.area);
   fprintf(file, "\
 Edges fixed           : %5d\n", stl->stats.edges_fixed);
   fprintf(file, "\
